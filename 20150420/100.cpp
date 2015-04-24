@@ -12,48 +12,42 @@ int calc(int num) {
   else { return num/2; }
 }
 
-int calcCycleLength(int input, int req1, int req2) {
+int calcCycleLength(int input) {
   int num, i;
   for (i=1,num=input;num!=1;i++) {
     num = calc(num);
-//    if(num > req1-1 && num < i ) {return 0;}
   }
   return i;
+/*
+  i=1;
+  while(num != 1) {
+    num = calc(num);
+    ++i;
+  }
+  return i;
+*/
 }
 
-int calcMaxCycleLength (int s, int e) {
-  int i, num;
-  for (i=s,num=0; i<=e; i++) {
-    int cmpnum = calcCycleLength(i, s, e);
-    num = num > cmpnum ? num : cmpnum;
+int calcMaxCycleLength (int min, int max) {
+  int i, maxlength, cmpnum;
+  maxlength=0;
+  for (i=min; i<=max; i++) {
+    cmpnum = calcCycleLength(i);
+    maxlength = std::max(maxlength,cmpnum);
   }
-  return num;
+  return maxlength;
 }
 
 int main () {
-  ios::sync_with_stdio(false);
-//  int min,max;
-//  cin >> min >> max; cin.ignore();
+//  ios::sync_with_stdio(false);
+  int in_num1,in_num2,maxlength;
 
   while (1) {
-    int num1,num2;
-    cin >> num1 >> num2;
-//cout << min(num1, num2);
-
-    int num = calcMaxCycleLength(min(num1, num2), max(num1, num2));
-    cout << num1 << ' ' << num2 << ' ' << num << endl;
-//    cout << min << ' ' << max << ' ' << endl;
-    if (cin.eof()) { break; }
+    cin >> in_num1 >> in_num2;
+    maxlength = calcMaxCycleLength(min(in_num1, in_num2), max(in_num1, in_num2));
+    cout << in_num1 << ' ' << in_num2 << ' ' << maxlength << endl;
+    if(cin.eof()){ break; }
   }
 
-//  cout << min << ' ' << max << endl;
-//  int num = calcMaxCycleLength(min, max);
-//  cout << s << ' ' << e << ' ' << num << '\n';
   return 0;
-}	
-
-
-
-
-
-
+}
