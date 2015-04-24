@@ -44,8 +44,13 @@ int main () {
 
   while (1) {
     cin >> in_num1 >> in_num2;
-    maxlength = calcMaxCycleLength(min(in_num1, in_num2), max(in_num1, in_num2));
-    cout << in_num1 << ' ' << in_num2 << ' ' << maxlength << endl;
+    if(cin.fail()) {
+      cin.clear();
+      cin.ignore();
+    } else {
+      maxlength = calcMaxCycleLength(min(in_num1, in_num2), max(in_num1, in_num2));
+      cout << in_num1 << ' ' << in_num2 << ' ' << maxlength << endl;
+    }
     if(cin.eof()){ break; }
   }
 
