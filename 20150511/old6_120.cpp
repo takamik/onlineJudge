@@ -34,36 +34,58 @@ break;
 int sortNumList(vector<int> num_list) {
   vector<int>::iterator max = max_element(num_list.begin(), num_list.end());
   int num_length = num_list.size();
-//  int cnt = num_length;
-  int cnt = 1;
+  int cnt = num_length;
+//  int prev_reverse_idx = 0;
+  vector<int> sorted_num_list= num_list;
+  sort(sorted_num_list.begin(), sorted_num_list.end());
+  vector<int> compare_num_list(num_length);
 
 int i=0;
 
-//  while(cnt > 0){
-  while(cnt < num_length+1){
+  //while(num_list.size() > 1){
+  while(cnt > 0){
+/*
+    if(equal(sorted_num_list.begin(), sorted_num_list.end(), compare_num_list.begin())) {
+      cout << "%%%%%%%%%%";
+      break; 
+    } 
+*/
+
     max = max_element(num_list.begin(), num_list.end());
+//    cnt = num_list.size();
     
     if(*max == num_list.back()){
       //no reverse
+      //compare_num_list[cnt-1] = num_list.back();
+
       num_list.pop_back();
-//      --cnt;
-      ++cnt;
+      --cnt;
     }
     else if(*max == num_list.front()){
-/*      if(cnt == num_length){
+      if(cnt == num_length){
         cout << "*" << 1 << "*" << ' ';
       }
       else {
+        cout << ((num_length+1) - cnt) << ' ';
       }
-*/
-      cout << cnt << ' ';
       reverse(num_list.begin(), num_list.end());
     }
     else {
       cout << (num_length - distance(num_list.begin(), max)) << ' ';
       reverse(num_list.begin(), max+1);
     }
-
+/*
+cout <<"***"<<endl;
+for(int j=0;j<num_list.size();++j){
+cout << num_list[j]  << ' ' ;
+}
+cout << endl;
+cout <<"***"<<endl;
+for(int j=0;j<compare_num_list.size();++j){
+cout << compare_num_list[j]  << ' ' ;
+}
+cout << endl;
+*/
 if(i < 10) { ++i; } else { break; }
 
   }
