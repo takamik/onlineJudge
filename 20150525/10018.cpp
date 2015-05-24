@@ -5,8 +5,6 @@
 #include <algorithm>
 using namespace std;
 
-
-
 unsigned long reverseNum(const unsigned long& original_num) {
   unsigned long max_num = 4294967295;
   unsigned long reverse_num = original_num;
@@ -15,20 +13,15 @@ unsigned long reverseNum(const unsigned long& original_num) {
   os << original_num;
   string str = os.str();
 
-//cout << "test:" << str << endl;
   reverse(str.begin(), str.end());
-//cout << "result:" << str << endl;
 
   try {
     reverse_num = stol(str);
     if(max_num < reverse_num) { return 0; }
   } catch(std::exception const &exc) {
     cout << "Error!" << endl;
-//    throw exc;
     return 0;
   }
-
-//cout << "converted:" << reverse_num << endl;
 
   return reverse_num;
 }
@@ -43,7 +36,6 @@ struct Number {
     orig_num = num;
     rev_num = reverseNum(orig_num);
 
-//cout << "before compare:" << orig_num << " " << rev_num << " " <<reverseNum(num) << endl;
     if(rev_num == 0 && orig_num !=0) {
       isPalindrome = -1;
     } else {
