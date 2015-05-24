@@ -5,37 +5,58 @@
 #include <algorithm>
 using namespace std;
 
-int reverseNum(const int& original_num) {
-  int reverse_num = original_num;;
+
+
+unsigned long reverseNum(const unsigned long& original_num) {
+  unsigned long max_num = 4294967295;
+  unsigned long reverse_num = original_num;
 
   ostringstream os;
   os << original_num;
   string str = os.str();
 
+//cout << "test:" << str << endl;
   reverse(str.begin(), str.end());
-  reverse_num = stoi(str);
+//cout << "result:" << str << endl;
+
+  try {
+    reverse_num = stol(str);
+    if(max_num < reverse_num) { return 0; }
+  } catch(std::exception const &exc) {
+    cout << "Error!" << endl;
+//    throw exc;
+    return 0;
+  }
+
+//cout << "converted:" << reverse_num << endl;
 
   return reverse_num;
 }
 
 struct Number {
-  int orig_num, rev_num;
-  bool isPalindrome;
+  unsigned long orig_num, rev_num;
+  int isPalindrome;
   
   Number() { orig_num = 0; rev_num = 0; isPalindrome = true;}
 
-  void setNumber(int num) {
+  void setNumber(unsigned long num) {
     orig_num = num;
     rev_num = reverseNum(orig_num);
-    isPalindrome = (orig_num == rev_num);
+
+//cout << "before compare:" << orig_num << " " << rev_num << " " <<reverseNum(num) << endl;
+    if(rev_num == 0 && orig_num !=0) {
+      isPalindrome = -1;
+    } else {
+      isPalindrome = (orig_num == rev_num) ? 1 : 0;
+    }
   }
 
-  int add(){
+  unsigned long add(){
     return orig_num + rev_num;
   }
 };
 
-void culc(int& orig_num, int& cnt, int& palindrome) {
+bool culc(unsigned long& orig_num, int& cnt, unsigned long& palindrome) {
   cnt = 0;
   palindrome = 0;
   int max_cnt = 1000;
@@ -44,30 +65,40 @@ void culc(int& orig_num, int& cnt, int& palindrome) {
   while(cnt < max_cnt) {
     num.setNumber(orig_num);
 
-    if(num.isPalindrome) {
+    if(num.isPalindrome == 1) {
       palindrome = num.orig_num;
-      return;
+      return true;
+    } else if (num.isPalindrome == -1) {
+      return false;
     }
 
     orig_num = num.add();
     ++cnt;
   }
-
+  return false;
 }
 
-void printAnswer(const int& cnt, const int& palindrome) {
+void printAnswer(const int& cnt, const unsigned long& palindrome) {
   cout << cnt << " " << palindrome << endl;
 }
 
 int main() {
-  int nums_size, num, cnt, palindrome;
+  int nums_size, cnt;
+  unsigned long num, palindrome;
+  bool culc_result;
 
   cin >> nums_size;
 
   for (int i=0; i<nums_size; ++i) {
+    culc_result = false;
+    
     cin >> num;
-    culc(num, cnt, palindrome);
-    printAnswer(cnt, palindrome);
+    
+    culc_result = culc(num, cnt, palindrome);
+    
+    if(culc_result){
+      printAnswer(cnt, palindrome);
+    }
   }
 
   return 0;
