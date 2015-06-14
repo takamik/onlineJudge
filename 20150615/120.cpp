@@ -6,8 +6,6 @@
 #include <sstream>
 using namespace std;
 
-int maxlen_num_list = 30;
-
 vector<int> createNumList(string num_line) {
 
   vector<int> num_list;
