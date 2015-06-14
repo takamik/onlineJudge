@@ -17,28 +17,12 @@ vector<int> createNumList(string num_line) {
 
   while (getline(ss, num, delimiter)) {
     if (!num.empty()) {
+      cout << num << ' ';
       num_list.push_back(stoi(num));
     }
   }
+  cout << endl;
 
-/*
-  vector<int> num_list(maxlen_num_list);
-  int num;
-
-  int i = 0;
-  while (i < maxlen_num_list) {
-    if(cin.fail()) {
-      cin.clear();
-      cin.ignore();
-    } else {
-      cin >> num;
-      num_list[i++] = num;
-    }
-    if(cin.eof()){ break; }
-  }
-
-  num_list.resize(i-1);
-*/
   return num_list;
 }
 
