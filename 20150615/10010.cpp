@@ -1,193 +1,127 @@
 #include <iostream>
+#include <math.h>
 #include <vector>
-#include <algorithm>
-#include <string>
-
 using namespace std;
-vector<string> createCharGrid(int height, int width) {
-  vector<string> grid(height+1);
 
-  for(int i=0; i<height+1; i++) {
-    getline(cin, grid[i]);
-  }
-  grid.erase(grid.begin());
+vector<vector<int>> direction {
+  { 0, 1},
+  { 1, 1},
+  { 1, 0},
+  { 1,-1},
+  { 0,-1},
+  {-1,-1},
+  {-1, 0},
+  {-1, 1}
+};
+vector<vector<char>> charMap {
+  {'-', '-', '-', '-', '-', '-', '-'},
+  {'-', 'a', 'b', 'c', 'd', 'e', '-'},
+  {'-', 'f', 'g', 'h', 'i', 'j', '-'},
+  {'-', 'k', 'l', 'm', 'n', 'o', '-'},
+  {'-', 'p', 'q', 'r', 's', 't', '-'},
+  {'-', 'u', 'v', 'w', 'x', 'y', '-'},
+  {'-', '-', '-', '-', '-', '-', '-'},
+};
 
-  return grid;  
+vector<int> getNextPosition(vector<int> current, int dir) {
+  current[0] = current[0] + direction[dir][0];
+  current[1] = current[1] + direction[dir][1];
+  return current;
 }
 
-void search_first_char_location(vector<string> grid, char first_char, 
-    int& height, int& width) {
-  for(int i=0; i<grid.size(); i++) {
-    //string line = grid[i];
-    for(int k=0; k<grid[i].size(); k++) {
-//      if(!strcmp(grid[i][k], first_char)) {
-      if(grid[i][k] == first_char) {
-        height = (int)i;
-        width = (int)k;
-        //cout << i << " " << k << endl;
-        return;
+char getChar(vector<int> current) {
+  int v = current[0];
+  int h = current[1];
+  return charMap[v][h];
+}
+
+bool checkHasWord(vector<int> current, string word) {
+  int  cnt_word;
+  bool has_chr;
+  vector<int> next(2);
+  char chr;
+
+  for(cnt_word=1; cnt_word<word.size(); cnt_word++) {
+    has_chr = false;
+
+    // searchNextChar
+    for(int i=0; i<direction.size(); i++) {
+      next = getNextPosition(current, i);
+      chr = getChar(next);
+
+      if(chr == word[cnt_word]) {
+        //cout << '>' << chr << endl;
+        has_chr = true;
+        break;
       }
+
+    }
+    current = next;
+
+    if(!has_chr) {
+      return false;
     }
   }
-}
-
-void search_next_char_location(vector<string> grid, char target_char, 
-    int& height, int& width) {
-cout << grid[height][width] << endl;
-  
-  //right
-//  if() {
-    
-//  }
-
-
-}
-
-void search_name_location(vector<string> grid, string target_name) {
-  vector<string>::iterator it;
-  int height[target_name.size()];
-  int width[target_name.size()];
-
-  search_first_char_location(grid, target_name[0], height[0], width[0]);
-  search_next_char_location(grid, target_name[1], height[0], width[0]);
-/*
-  for(int j=0; j<target_name.size(); j++) {
-    for(int i=0; i<grid.size(); i++) {
-      string line = grid[i];
-      for(int k=0; k<line.size(); k++) {
-        if(line[k] == target_name[j]) {
-          height[j] = i;
-          width[j] = k;
-          cout << i << " " << k << endl;
-          return;
-        }
-      }
-    }
-  }
-*/
-  cout << height[0] << " " << width[0] << endl;
-  
 }
 
 int main() {
-  int max_grids_count;
-  cin >> max_grids_count;
-  while(max_grids_count--) {
-    int height, width;
-    cin >> height >> width;
-    vector<string> grid = createCharGrid(height, width);
+  vector<int> first(2);
 /*
-    for(int i=0; i<grid.size(); i++) {
-      cout << grid[i] << endl;
-    }
+  vector<int> current(2), next(2);
+  char chr;
+  string word = "xrls";
+  int cnt_word;
+  bool has_chr = false;
 */
-    int max_names_count;  
-    cin >> max_names_count;
+  bool has_word = false;
 
+  //while(cnt_=1; j<word.size(); j++) {
 
-    string target_name;
-    getline(cin, target_name);
+  // searchFirstChar
+  // first_position
+  first[0] = 5;
+  first[1] = 4;
+//cout << first[0] << first[1] << endl;
+  //current = first;
+  has_word = checkHasWord(first, "xrls");
 
-    while(max_names_count--) {
-      getline(cin, target_name);
-      search_name_location(grid, target_name);
-
-break;
-    }
-    getline(cin, target_name);
-    cout << "######################" << endl;
-break;
-
+  if(has_word) {
+    cout << first[0] << first[1] << endl;
   }
+  else{
+    cout << "nothing" << endl;
+  }
+
+
+/*
+  for(cnt_word=1; cnt_word<word.size(); cnt_word++) {
+    // searchNextChar
+    for(int i=0; i<direction.size(); i++) {
+      //cout << direction[i][0] << " " << direction[i][1] << endl;
+      next = getNextPosition(current, i);
+      //cout << next[0] << " " << next[1] << endl;
+      chr = getChar(next);
+      //cout << ch << endl;
+      if(chr == word[cnt_word]) {
+        cout << '>' << chr << endl;
+        current = next;
+        // check
+        if(cnt_word == word.size()-1) {
+          has_chr = true;
+        }
+        break;
+      }
+    }
+  }
+*/
+
+
+
+
+
+
+
+
 
   return 0;
 }
-
-
-/*
-4
-
-3 2
-we
-ra
-sd
-2
-wrs
-dae
-
-5 3
-rty
-uis
-dfh
-jxc
-ncg
-3
-cfu
-uis
-gcn
-
-6 4
-kbls
-robg
-dnys
-fblt
-bhnm
-virg
-1
-obg
-
-4 3
-hgs
-rnd
-sss
-djn
-1
-sns
-*/
-
-/*
-we
-ra
-sd
-***-1
-&&&2
-%%%wrs
-%%%dae
-%%%
-%%%5 3
-%%%rty
-%%%uis
-%%%dfh
-%%%jxc
-%%%ncg
-%%%4
-%%%cfu
-%%%uis
-%%%gcn
-%%%ifx
-%%%
-%%%
-%%%
-*/
-
-/*
-0 0
-2 1
-######################
-3 2
-1 0
-4 2
-1 1
-*/
-
-
-
-
-
-
-
-
-
-
-
-

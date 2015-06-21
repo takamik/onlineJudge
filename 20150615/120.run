@@ -1,0 +1,13 @@
+#// This file overrides the My C++ (simple) runner
+#// For more information see http://docs.c9.io:8080/#!/api/run-method-run
+{
+  "cmd": [
+    "sh",
+    "-c",
+    "/usr/bin/g++ -lm -lcrypt -O2 -std=c++11 -pipe /home/ubuntu/workspace/20150615/120.cpp -o runme;  chmod 755 /home/ubuntu/workspace/20150615/runme; /home/ubuntu/workspace/20150615/runme"
+    "echo 5 4 3 2 1"
+  ],
+  "info": "Running $file_path/$file_name",
+  "env": {},
+  "selector": "^.*\\.(cpp|cc)$"
+}
