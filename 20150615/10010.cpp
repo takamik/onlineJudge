@@ -1,6 +1,9 @@
 #include <iostream>
-#include <math.h>
 #include <vector>
+#include <string>
+//#include <cctype>
+//#include <locale>
+#include <algorithm>
 using namespace std;
 
 vector<vector<int>> direction {
@@ -9,119 +12,144 @@ vector<vector<int>> direction {
   { 1, 0},
   { 1,-1},
   { 0,-1},
-  {-1,-1},
+  {-1,-1}, 
   {-1, 0},
   {-1, 1}
 };
-vector<vector<char>> charMap {
-  {'-', '-', '-', '-', '-', '-', '-'},
-  {'-', 'a', 'b', 'c', 'd', 'e', '-'},
-  {'-', 'f', 'g', 'h', 'i', 'j', '-'},
-  {'-', 'k', 'l', 'm', 'n', 'o', '-'},
-  {'-', 'p', 'q', 'r', 's', 't', '-'},
-  {'-', 'u', 'v', 'w', 'x', 'y', '-'},
-  {'-', '-', '-', '-', '-', '-', '-'},
-};
 
-vector<int> getNextPosition(vector<int> current, int dir) {
-  current[0] = current[0] + direction[dir][0];
-  current[1] = current[1] + direction[dir][1];
+static const int HEIGHT = 0;
+static const int WIDTH  = 1;
+
+string toUpper(string str) {
+  for(int i=0;i<str.size(); i++) {
+    str[i] = toupper(str[i]);
+  }
+  return str;
+}
+
+void createCharGrid(vector<vector<char>> &grid) {
+  string line;
+  int max_height = grid.size()-1;
+
+  getline(cin, line);
+//  transform(line.begin(), line.end(), line.begin(), std::tolower);
+  line = toUpper(line);
+
+  for(int h=1; h<max_height; h++) {
+    getline(cin, line);
+    int max_line = line.size();
+    for(int w=0; w<max_line; w++) {
+      grid[h][w+1] = line[w];
+    }
+  }
+}
+
+vector<int> getFirstCharPosition(vector<vector<char>> const &grid, vector<int> const &current, char first_char) {
+  int max_height = grid.size();
+  int max_width  = grid[0].size()-1;
+  vector<int> location(2);
+
+  for(int h=current[HEIGHT]; h<max_height; h++) {
+    for(int w=0; w<max_width; w++) {
+
+      // already searched
+      if(h == current[HEIGHT] && w < current[WIDTH]) continue;
+
+      if(grid[h][w] == first_char) {
+        location[HEIGHT] = h;
+        location[WIDTH]  = w;
+        return location;
+      }
+    }
+  }
+}
+
+vector<int> getNextPosition(vector<int> current, int const &idx_direction) {
+  current[HEIGHT] = current[HEIGHT] + direction[idx_direction][HEIGHT];
+  current[WIDTH]  = current[WIDTH]  + direction[idx_direction][WIDTH];
   return current;
 }
 
-char getChar(vector<int> current) {
-  int v = current[0];
-  int h = current[1];
-  return charMap[v][h];
+bool checkHasChar(vector<vector<char>> const &grid, vector<int> &current, int idx_dir, char search_char) {
+  vector<int> next = getNextPosition(current, idx_dir);
+
+  if(grid[next[HEIGHT]][next[WIDTH]] == search_char) {
+    current = next; //move position
+    return true;
+  }
+  return false;
 }
 
-bool checkHasWord(vector<int> current, string word) {
-  int  cnt_word;
-  bool has_chr;
+bool checkHasWord(vector<vector<char>> const &grid, vector<int> current, string const &word) {
+  int  idx_word, max_word, idx_dir, max_dir;
+  max_word = word.size();
+  max_dir  = direction.size();
+
+  bool has_char;
   vector<int> next(2);
   char chr;
 
-  for(cnt_word=1; cnt_word<word.size(); cnt_word++) {
-    has_chr = false;
 
-    // searchNextChar
-    for(int i=0; i<direction.size(); i++) {
-      next = getNextPosition(current, i);
-      chr = getChar(next);
-
-      if(chr == word[cnt_word]) {
-        //cout << '>' << chr << endl;
-        has_chr = true;
-        break;
-      }
-
-    }
-    current = next;
-
-    if(!has_chr) {
-      return false;
-    }
+  // searchSecondChar
+  idx_word = 1; //search from second char
+  for(idx_dir=0; idx_dir<max_dir; idx_dir++) {
+    has_char = checkHasChar(grid, current, idx_dir, word[idx_word]);
+    if(has_char) break;
   }
+  if(!has_char) return false;
+
+  // searchNextChar
+  for(++idx_word; idx_word<max_word; idx_word++) {
+    has_char = checkHasChar(grid, current, idx_dir, word[idx_word]);
+    if(!has_char) return false;
+  }
+
+  return has_char;
 }
 
 int main() {
-  vector<int> first(2);
-/*
-  vector<int> current(2), next(2);
-  char chr;
-  string word = "xrls";
-  int cnt_word;
-  bool has_chr = false;
-*/
-  bool has_word = false;
 
-  //while(cnt_=1; j<word.size(); j++) {
+  int max_grids_count;
+  int height, width;
+  vector<int> first;
+  string word;
+  bool has_word;
 
-  // searchFirstChar
-  // first_position
-  first[0] = 5;
-  first[1] = 4;
-//cout << first[0] << first[1] << endl;
-  //current = first;
-  has_word = checkHasWord(first, "xrls");
+  cin >> max_grids_count;
+  while(max_grids_count--) {
+    getline(cin, word);
 
-  if(has_word) {
-    cout << first[0] << first[1] << endl;
-  }
-  else{
-    cout << "nothing" << endl;
-  }
+    // create charGrid
+    cin >> height >> width;
+    vector<char> init(width+2, '-');
+    vector<vector<char>> grid(height+2, init);
+    createCharGrid(grid);
 
+    // get count of target words to search
+    int max_words_count;  
+    cin >> max_words_count;
 
-/*
-  for(cnt_word=1; cnt_word<word.size(); cnt_word++) {
-    // searchNextChar
-    for(int i=0; i<direction.size(); i++) {
-      //cout << direction[i][0] << " " << direction[i][1] << endl;
-      next = getNextPosition(current, i);
-      //cout << next[0] << " " << next[1] << endl;
-      chr = getChar(next);
-      //cout << ch << endl;
-      if(chr == word[cnt_word]) {
-        cout << '>' << chr << endl;
-        current = next;
-        // check
-        if(cnt_word == word.size()-1) {
-          has_chr = true;
-        }
-        break;
+    getline(cin, word);
+
+    // search target words
+    while(max_words_count--) {
+      getline(cin, word);
+//      transform(word.begin(), word.end(), word.begin(), tolower);
+      word = toUpper(word);
+
+      first = {1, 0};
+      has_word = false;
+
+      while(!has_word) {
+        first[WIDTH] = first[WIDTH]+1;
+        first = getFirstCharPosition(grid, first, word[0]);
+        has_word = checkHasWord(grid, first, word);
       }
+      cout << first[0] << first[1] << endl;
     }
+
+    cout << endl;
   }
-*/
-
-
-
-
-
-
-
-
 
   return 0;
 }
