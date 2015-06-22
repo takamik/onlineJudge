@@ -19,14 +19,7 @@ vector<vector<int>> direction {
 
 static const int HEIGHT = 0;
 static const int WIDTH  = 1;
-/*
-string toUpper(string str) {
-  for(int i=0;i<str.size(); i++) {
-    str[i] = toupper(str[i]);
-  }
-  return str;
-}
-*/
+
 void createCharGrid(vector<vector<char>> &grid) {
   string line;
   int max_height = grid.size()-1;
@@ -47,6 +40,7 @@ vector<int> getFirstCharPosition(vector<vector<char>> const &grid, vector<int> c
   int max_height = grid.size();
   int max_width  = grid[0].size()-1;
   vector<int> location(2);
+
 
   for(int h=current[HEIGHT]; h<max_height; h++) {
     for(int w=0; w<max_width; w++) {
@@ -88,7 +82,6 @@ bool checkHasWord(vector<vector<char>> const &grid, vector<int> current, string 
   vector<int> next(2);
   char chr;
 
-
   // searchSecondChar
   idx_word = 1; //search from second char
   for(idx_dir=0; idx_dir<max_dir; idx_dir++) {
@@ -104,6 +97,33 @@ bool checkHasWord(vector<vector<char>> const &grid, vector<int> current, string 
   }
 
   return has_char;
+}
+
+bool isWordStartingFrom(string word,  const vector<vector<char> > & grid, int row, int col) {
+	for ( int i = 0 ; i < 8  ; ++i ) {
+		int j;
+		for ( j = 0 ; j < word.size() ; j++) {
+			int r = row + direction[i][0];
+			int c = col + direction[i][1];
+			if ( word[j] != grid[r][c] ) {
+				break;
+			}
+		}
+		if ( j == word.size()) {
+			return true;
+		}
+	}
+	return false;
+}
+
+pair<int,itn> getPosition(string word, const vector<vector<char> > & grid) {
+	for ( int row = 1 ; row <= height ; row++) {
+		for ( int col = 1 ; col <= width ; col++) {
+			if ( isWordStartingFrom(word,grid,row,col) ) {
+				return make_pair(row,col);
+			}
+		}
+	}
 }
 
 int main() {
@@ -134,7 +154,8 @@ int main() {
     while(max_words_count--) {
       getline(cin, word);
 //      transform(word.begin(), word.end(), word.begin(), tolower);
-//      word = toUpper(word);
+
+      pair<int,int> position = getPostion(word, grid);
 
       first = {1, 0};
       has_word = false;
@@ -144,7 +165,7 @@ int main() {
         first = getFirstCharPosition(grid, first, toupper(word[0]));
         has_word = checkHasWord(grid, first, word);
       }
-      cout << first[0] << first[1] << endl;
+      cout << first[0] << ' ' <<first[1] << endl;
     }
 
     cout << endl;
