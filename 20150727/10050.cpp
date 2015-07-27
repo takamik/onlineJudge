@@ -4,7 +4,18 @@
 #include <vector>
 using namespace std;
 
-int setHartal(const vector<int>& hartals, const int& day) {
+void setHartals(vector<int> hartals) {
+  int parties, hartal;
+
+  cin >> parties;
+  hartals.resize(parties, 0);
+  for(int i=0; i<parties; i++) {
+    cin >> hartal;
+    hartals[i] = hartal;
+  }
+}
+
+int isHartal(const vector<int>& hartals, const int& day) {
   for(int i=0; i<hartals.size(); i++) {
     if(day%hartals[i] == 0) {
       return 1;
@@ -13,16 +24,31 @@ int setHartal(const vector<int>& hartals, const int& day) {
   return 0;
 }
 
+int calcLostWorkingDays(const vector<int>& hartals, const int& days) {
+  int day_of_week, working_days;
+
+  for(int i=1; i<days+1; i++) {
+    day_of_week = i % 7;
+    if((day_of_week != 0 & day_of_week != 6)
+      && isHartal(hartals, i) == 1){
+      ++working_days;
+    }
+  }
+  return working_days;
+}
+
 int main() {
-  int tests, parties, hartal, days, working_days, day_of_week;
-  vector<int> period, hartals;
+  int tests, days;
+  vector<int> hartals;
 
   cin >> tests;
   while(tests--) {
 
     // INPUT
     cin >> days;
-    period.resize(days, 0);
+    setHartals(hartals);
+/*
+    cin >> days;
 
     cin >> parties;
     hartals.resize(parties, 0);
@@ -31,18 +57,19 @@ int main() {
       cin >> hartal;
       hartals[i] = hartal;
     }
-
+*/
     // OUTPUT
-    working_days = 0;
-    for(int i=1; i<period.size()+1; i++) {
-      period[i-1] = setHartal(hartals, i);
-
+    cout << calcLostWorkingDays(hartals, days) << endl;
+/*
+    for(int i=1; i<days+1; i++) {
       day_of_week = i % 7;
-      if((day_of_week != 0 & day_of_week != 6) && period[i-1] == 1){
+      if((day_of_week != 0 & day_of_week != 6)
+        && setHartal(hartals, i) == 1){
         ++working_days;
       }
     }
     cout << working_days << endl;
+*/
   }
   return 0; 
 }
