@@ -4,7 +4,7 @@
 #include <vector>
 using namespace std;
 
-void setHartals(vector<int> hartals) {
+void setHartals(vector<int>& hartals) {
   int parties, hartal;
 
   cin >> parties;
@@ -43,33 +43,15 @@ int main() {
 
   cin >> tests;
   while(tests--) {
-
     // INPUT
     cin >> days;
     setHartals(hartals);
-/*
-    cin >> days;
-
-    cin >> parties;
-    hartals.resize(parties, 0);
-
-    for(int i=0; i<parties; i++) {
-      cin >> hartal;
-      hartals[i] = hartal;
-    }
-*/
+  for(int i=0; i<hartals.size(); i++) {
+    cout << hartals[i] << endl;
+  }
+return 0;
     // OUTPUT
     cout << calcLostWorkingDays(hartals, days) << endl;
-/*
-    for(int i=1; i<days+1; i++) {
-      day_of_week = i % 7;
-      if((day_of_week != 0 & day_of_week != 6)
-        && setHartal(hartals, i) == 1){
-        ++working_days;
-      }
-    }
-    cout << working_days << endl;
-*/
   }
   return 0; 
 }
